@@ -1,209 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ND News Dashboard</title>
-<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NDE News Dashboard</title>
+<link rel="icon" type="image/png" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png">
 <style>
-body{margin:0;font-family:sans-serif;background:#0e0e0e;color:#e9eef6;}
-.wrap{max-width:800px;margin:20px auto;padding:12px;}
-h1{color:#00aaff;display:flex;align-items:center;gap:8px;}
-h1 img{height:28px;}
-.card{background:#141414;border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
-label,input,select,button{padding:8px;border-radius:8px;background:#0f1720;border:1px solid #222;color:#e9eef6;margin-top:4px;width:100%;}
-button{cursor:pointer;border:none;transition:.2s;}
-button:hover{opacity:.85;}
-.smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:#e9eef6;margin-top:4px;width:auto;}
-.hidden{display:none;}
-.accent{color:#00aaff;}
-table{width:100%;border-collapse:collapse;margin-top:8px;}
-th,td{padding:8px;border:1px solid #222;font-size:13px;}
+body {margin:0;background:#0e0e0e;color:#e9eef6;font-family:Arial,sans-serif;}
+.wrap{max-width:1200px;margin:0 auto;padding:16px;}
+header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+header img{height:50px;}
+h1{color:#00aaff;margin:0;}
+.card{background:#141414;border-radius:12px;padding:16px;margin-top:12px;}
+select,input,button{padding:8px 10px;border-radius:8px;background:#0f1720;border:1px solid #222;color:#e9eef6;font-size:14px;}
+button{cursor:pointer;}
+table{width:100%;border-collapse:collapse;margin-top:12px;}
+th,td{border:1px solid #222;padding:8px;text-align:center;}
 th{background:#111;}
-.today{background:#ffaa00;color:#000;font-weight:700;}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png">ND News Dashboard</h1>
+<header>
+<img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png" alt="Logo">
+<h1>NDE News Dashboard</h1>
+</header>
 
-<!-- LOGIN -->
-<div id="loginCard" class="card">
-<label>Username</label>
-<select id="userSelect"></select>
-<label>Password</label>
-<input type="password" id="pwInput" placeholder="Enter password">
-<button id="loginBtn" style="background:#00aaff;color:#001;font-weight:600;">Login</button>
-<div id="loginStatus" style="margin-top:6px;">Select user → login</div>
+<div class="card" id="loginCard">
+  <label>User:</label>
+  <select id="userSelect"></select>
+  <label>Password:</label>
+  <input type="password" id="pwInput" placeholder="Enter password">
+  <button id="loginBtn">Login</button>
+  <div id="loginStatus"></div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dash" class="card hidden">
-<div id="greeting" class="accent"></div>
-<div id="roleBadge"></div>
-<div id="todayName"></div>
-<div id="nowTime"></div>
+<div class="card hidden" id="dash">
+  <div id="greeting"></div>
+  <div id="todayTasks"></div>
 
-<hr>
-
-<b>Today's Tasks:</b>
-<div id="todayTasksArea" style="margin-top:6px;"></div>
-
-<b style="margin-top:12px;display:block;">Weekly Schedule:</b>
-<div id="weekArea" style="margin-top:6px;"></div>
-
-<div style="margin-top:12px;">
-<button id="refreshBtn" class="smallbtn">Refresh</button>
-<button id="logoutBtn" class="smallbtn">Log out</button>
-</div>
-
-<!-- Admin Panel (Logan) -->
-<div id="adminPanel" class="card hidden" style="margin-top:12px">
-<b>Manager Panel</b>
-<input type="text" id="newUserName" placeholder="Username">
-<select id="newUserRole">
-<option value="Anchor">Anchor</option>
-<option value="Head of Writing">Head of Writing</option>
-<option value="Reporter">Reporter</option>
-<option value="Manager">Manager</option>
-<option value="Head Of News/Director">Head Of News/Director</option>
-</select>
-<input type="password" id="newUserPassword" placeholder="Password">
-<button id="addUserBtn" class="smallbtn">Add Member</button>
-<div id="memberList" style="margin-top:6px;"></div>
-</div>
-
-<div class="calendar card">
-<b>November Calendar</b>
-<table id="calendarTable">
-<thead><tr><th>Day</th><th>Task</th></tr></thead>
-<tbody></tbody>
-</table>
-</div>
-
+  <table id="scheduleTable">
+    <thead>
+      <tr>
+        <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 </div>
 </div>
 
 <script>
-const STORAGE_KEY='nd_news_store';
-let store=null,currentUser=null;
-
-// Default users with passwords
-const defaultUsers={
-  Luca:{pass:'luca123',role:'Anchor'},
-  Ivana:{pass:'ivana123',role:'Head of Writing'},
-  Matthew:{pass:'matthew123',role:'Reporter'},
-  Logan:{pass:'Lp1157551',role:'Head Of News/Director'}
+const defaultUsers = {
+"Luca P":{password:'Luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Ivana R":{password:'Ivana123',role:'Head Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Matthew F":{password:'Matthew123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Logan P":{password:'Lp1157551',role:'Head Of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'}},
+"Maddie S":{password:'Maddie123',role:'Manager',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Athan T":{password:'Athan123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Lily S":{password:'Lily123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"George H":{password:'George123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Elena C":{password:'Elena123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Juliana T":{password:'Juliana123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Emma R":{password:'Emma123',role:'Assistant Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Andrew Z":{password:'Andrew123',role:'Cam Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Brennan":{password:'Brennan123',role:'Cam Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Nicholas V":{password:'Nicholas123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Dominic N":{password:'Dominic123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Elizabeth R":{password:'Elizabeth123',role:'Head Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Anaya D":{password:'Anaya123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Samantha P":{password:'Samantha123',role:'Writer Shadow – Colin',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Colin M":{password:'Colin123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Gianfranco B":{password:'Gianfranco123',role:'Reporter',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Alfred A":{password:'Alfred123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Jayden K":{password:'Jayden123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Mila T":{password:'Mila123',role:'Manager',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Elda A":{password:'Elda123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Kane":{password:'Kane123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Finn B":{password:'Finn123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Eric C":{password:'Eric123',role:'Idea Helper',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Serena S":{password:'Serena123',role:'Reporter Shadow– Matthew F',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}},
+"Keria M":{password:'Keria123',role:'Camera Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''}}
 };
 
-// Weekly schedule
-const schedule={
-  Monday:'Meeting in Library',
-  Tuesday:'Mrs Garafalo duty at Last',
-  Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo duty at Lunch',
-  Thursday:'Meeting in Library at First, Mr Garafalo duty at Lunch, Meeting at Last',
-  Friday:'Meeting in Library at Lunch and Junior Members at Last'
-};
+const userSelect = document.getElementById('userSelect');
+const pwInput = document.getElementById('pwInput');
+const loginBtn = document.getElementById('loginBtn');
+const loginStatus = document.getElementById('loginStatus');
+const loginCard = document.getElementById('loginCard');
+const dash = document.getElementById('dash');
+const greeting = document.getElementById('greeting');
+const todayTasks = document.getElementById('todayTasks');
+const scheduleBody = document.querySelector('#scheduleTable tbody');
 
-function el(id){return document.getElementById(id);}
-function pad(n){return n<10?'0'+n:n;}
-function timeNow(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
-
-function loadStore(){
-  let raw=localStorage.getItem(STORAGE_KEY);
-  store=raw?JSON.parse(raw):{users:{}};
-  for(const u in defaultUsers) store.users[u]=store.users[u]||{pass:defaultUsers[u].pass,role:defaultUsers[u].role};
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
-}
-
-function populateUsers(){
-  const sel=el('userSelect'); sel.innerHTML='<option value="">-- Choose User --</option>';
-  Object.keys(store.users).forEach(u=>{const o=document.createElement('option');o.value=u;o.textContent=u; sel.appendChild(o);});
-}
-
-el('loginBtn').onclick=()=>{
-  const u=el('userSelect').value,pw=el('pwInput').value;
-  if(!u){el('loginStatus').textContent='Choose a user'; return;}
-  if(pw===store.users[u].pass){
-    currentUser=u;
-    el('loginCard').classList.add('hidden');
-    el('dash').classList.remove('hidden');
-    updateDashboard();
-  } else el('loginStatus').textContent='Incorrect password';
-};
-
-el('logoutBtn').onclick=()=>{
-  currentUser=null;
-  el('dash').classList.add('hidden');
-  el('loginCard').classList.remove('hidden');
-};
-
-function updateDashboard(){
-  const u=store.users[currentUser];
-  el('greeting').textContent='Hello, '+currentUser+'!';
-  el('roleBadge').textContent=u.role;
-  const d=new Date(),dow=d.toLocaleString('en-US',{weekday:'long'});
-  el('todayName').textContent=dow+', '+d.toISOString().slice(0,10);
-  el('nowTime').textContent=timeNow();
-  el('todayTasksArea').textContent=schedule[dow]||'No tasks today';
-  
-  // Weekly
-  let weekHtml='';
-  for(const day in schedule) weekHtml+=`<div><b>${day}:</b> ${schedule[day]}</div>`;
-  el('weekArea').innerHTML=weekHtml;
-  
-  // Calendar
-  const tbody=el('calendarTable').querySelector('tbody'); tbody.innerHTML='';
-  for(let i=1;i<=30;i++){
-    const dstr=`2025-11-${pad(i)}`;
-    const tempDow=new Date(dstr).toLocaleString('en-US',{weekday:'long'});
-    tbody.innerHTML+=`<tr><td class="${dstr===new Date().toISOString().slice(0,10)?'today':''}">${dstr}</td><td>${schedule[tempDow]||'No tasks'}</td></tr>`;
-  }
-
-  // Admin Panel visibility
-  el('adminPanel').classList.toggle('hidden',currentUser!=='Logan');
-  if(currentUser==='Logan') updateMemberList();
-}
-
-// Admin functions
-const memberList=el('memberList');
-function updateMemberList(){
-  memberList.innerHTML='';
-  Object.keys(store.users).forEach(u=>{
-    if(u==='Logan') return;
-    const div=document.createElement('div');
-    div.style.display='flex'; div.style.gap='6px'; div.style.alignItems='center';
-    div.innerHTML=`<span>${u} — ${store.users[u].role}</span>`;
-    
-    const sel=document.createElement('select');
-    ['Anchor','Head of Writing','Reporter','Manager','Head Of News/Director'].forEach(r=>{
-      const o=document.createElement('option'); o.value=r; o.text=r;
-      if(r===store.users[u].role) o.selected=true; sel.appendChild(o);
+function populateUserSelect(){
+    userSelect.innerHTML = '<option value="">-- Select User --</option>';
+    Object.keys(defaultUsers).forEach(u=>{
+        let opt = document.createElement('option');
+        opt.value = u;
+        opt.textContent = u;
+        userSelect.appendChild(opt);
     });
-    sel.onchange=()=>{store.users[u].role=sel.value;localStorage.setItem(STORAGE_KEY,JSON.stringify(store));updateDashboard();}
-    
-    const del=document.createElement('button'); del.className='smallbtn'; del.textContent='Remove';
-    del.onclick=()=>{if(confirm(`Remove ${u}?`)){delete store.users[u]; localStorage.setItem(STORAGE_KEY,JSON.stringify(store)); populateUsers(); updateMemberList();}};
-    
-    div.appendChild(sel); div.appendChild(del);
-    memberList.appendChild(div);
-  });
 }
 
-// Add user
-el('addUserBtn').onclick=()=>{
-  const n=el('newUserName').value.trim(),r=el('newUserRole').value,p=el('newUserPassword').value;
-  if(!n||!p){alert('Enter username and password'); return;}
-  if(store.users[n]){alert('User already exists'); return;}
-  store.users[n]={pass:p,role:r};
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
-  populateUsers();
-  updateMemberList();
-  el('newUserName').value=''; el('newUserPassword').value='';
-};
+populateUserSelect();
 
-loadStore();
-populateUsers();
+loginBtn.addEventListener('click',()=>{
+    const user = userSelect.value;
+    const pw = pwInput.value;
+    if(!user){loginStatus.textContent='Select a user';return;}
+    if(defaultUsers[user].password===pw){
+        loginCard.classList.add('hidden');
+        dash.classList.remove('hidden');
+        pwInput.value='';
+        loginStatus.textContent='';
+        updateDashboard(user);
+    }else loginStatus.textContent='Incorrect password';
+});
+
+function updateDashboard(user){
+    greeting.textContent = `Hello, ${user}!`;
+    const u = defaultUsers[user];
+    const days=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+    // Show today's task
+    const today = new Date().toLocaleString('en-US',{weekday:'long'});
+    todayTasks.textContent = u.schedule[today] || 'No tasks today';
+
+    // Render table
+    scheduleBody.innerHTML='';
+    Object.keys(defaultUsers).forEach(name=>{
+        const row = document.createElement('tr');
+        days.forEach(d=>{
+            const td = document.createElement('td');
+            td.textContent = defaultUsers[name].schedule[d] || '';
+            row.appendChild(td);
+        });
+        scheduleBody.appendChild(row);
+    });
+}
 </script>
 </body>
 </html>
