@@ -149,20 +149,6 @@
     </div>
   </div>
 
-  <!-- CHANGE PASSWORD MODAL -->
-  <div id="changePwModal" class="modal hidden">
-    <div class="card">
-      <b>Change Password</b>
-      <label>Current password</label><input id="currentPwInput" type="password" /><br>
-      <label>New password</label><input id="newPwInput" type="password" /><br>
-      <label>Confirm new password</label><input id="confirmNewPwInput" type="password" /><br>
-      <div id="changePwMsg" class="tiny muted"></div>
-      <button id="changePwSave" style="background:var(--accent);color:#001">Save new password</button>
-      <button id="changePwCancel" class="smallbtn">Cancel</button>
-    </div>
-  </div>
-
-</div>
 
 <script>
 function el(id){return document.getElementById(id);}
@@ -270,3 +256,4 @@ loadStore().then(()=>{ populateUserDropdown(); });
 </script>
 </body>
 </html>
+
