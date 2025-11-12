@@ -3,147 +3,138 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>NDE News Dashboard — Offline</title>
-<link rel="icon" href="favicon.ico" /> <!-- Add your favicon path -->
+<title>NDE News Dashboard</title>
+<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png" /> <!-- favicon -->
 <style>
 :root {
-  --bg:#0e0e0e; --card:#141414; --accent:#00aaff; --muted:#9aa;
-  --text:#e9eef6; --good:#00ff7f; --warn:#ffde59; --bad:#ff6b6b;
+  --bg: #0e0e0e;
+  --card: #141414;
+  --accent: #00aaff;
+  --muted: #9aa;
+  --text: #e9eef6;
+  --good: #00ff7f;
+  --warn: #ffde59;
+  --bad: #ff6b6b;
 }
-html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
-.wrap{max-width:1100px;margin:18px auto;padding:18px;}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-h1{margin:0;font-size:22px;color:var(--accent);}
-.card{background:var(--card);border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
-.row{display:flex;gap:12px;align-items:flex-start;}
-.col{display:flex;flex-direction:column;gap:8px;}
-label{font-size:13px;color:var(--muted);}
-select,input,textarea,button{padding:8px 10px;border-radius:8px;background:#0f1720;border:1px solid #222;color:var(--text);font-size:14px;}
-button{cursor:pointer;border:none;transition:.2s;}
-button:hover{opacity:.85;}
-.controls{display:flex;gap:8px;flex-wrap:wrap;}
-.left{flex:1;}
-.right{min-width:300px;}
-table{width:100%;border-collapse:collapse;}
-th,td{padding:8px;border:1px solid #222;text-align:left;font-size:13px;}
-th{background:#111;}
-.tiny{font-size:12px;color:var(--muted);}
-.accent{color:var(--accent);}
-.hidden{display:none;}
-.center{text-align:center;}
-.smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:var(--text);}
-@media(max-width:880px){.row{flex-direction:column}.right{min-width:unset;width:100%;}}
-.calendar{margin-top:16px;overflow-x:auto;}
-.calendar .today{background:#ffaa00;color:#000;font-weight:700;}
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+.wrap { max-width: 1100px; margin: 18px auto; padding: 18px; }
+header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+h1 { margin: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; color: var(--accent); }
+h1 img { width: 32px; height: 32px; }
+.card { background: var(--card); border-radius: 12px; padding: 16px; margin-top: 12px; box-shadow: 0 6px 28px rgba(0,0,0,0.6); }
+.row { display: flex; gap: 12px; align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 8px; }
+label { font-size: 13px; color: var(--muted); }
+select, input, textarea, button { padding: 8px 10px; border-radius: 8px; background: #0f1720; border: 1px solid #222; color: var(--text); font-size: 14px; }
+button { cursor: pointer; border: none; transition: 0.2s; }
+button:hover { opacity: 0.85; }
+.left { flex: 1; }
+.right { min-width: 300px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px; border: 1px solid #222; text-align: left; font-size: 13px; }
+th { background: #111; }
+.tiny { font-size: 12px; color: var(--muted); }
+.accent { color: var(--accent); }
+.hidden { display: none; }
+.center { text-align: center; }
+.smallbtn { padding: 6px 10px; border-radius: 6px; background: #0b1220; color: var(--text); }
+@media (max-width: 880px) { .row { flex-direction: column; } .right { min-width: unset; width: 100%; } }
+.calendar { margin-top: 16px; overflow-x: auto; }
+.calendar .today { background: #ffaa00; color: #000; font-weight: 700; }
 </style>
 </head>
 <body>
 <div class="wrap">
-<header>
-<h1>NDE News Dashboard</h1>
-<div class="toolbar">
-  <div class="tiny muted">Offline demo</div>
-  <button id="printBtn" class="smallbtn">🖨 Print Tasks</button>
-  <select id="theme" class="smallbtn">
-    <option value="dark">Dark</option>
-    <option value="blue">Blue Neon</option>
-    <option value="gold">Gold</option>
-  </select>
-</div>
-</header>
+  <header>
+    <h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png" alt="Logo"> NDE News Dashboard</h1>
+  </header>
 
-<!-- LOGIN CARD -->
-<div id="loginCard" class="card">
-  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-    <div>
-      <label>Username</label><br>
-      <select id="userSelect"></select>
+  <!-- LOGIN CARD -->
+  <div id="loginCard" class="card">
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+      <div>
+        <label>Username</label><br>
+        <select id="userSelect"></select>
+      </div>
+      <div>
+        <label>Password</label><br>
+        <input id="pwInput" type="password" placeholder="Enter password" />
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button id="loginBtn" style="background:var(--accent);color:#001;font-weight:600;">Login</button>
+      </div>
+      <div style="margin-left:auto" class="muted tiny" id="loginStatus">Select user → login</div>
     </div>
-    <div>
-      <label>Password</label><br>
-      <input id="pwInput" type="password" placeholder="Enter password" />
-    </div>
-    <div style="display:flex;flex-direction:column;gap:6px">
-      <button id="loginBtn" style="background:var(--accent);color:#001;font-weight:600;">Login</button>
-    </div>
-    <div style="margin-left:auto" class="muted tiny" id="loginStatus">Select user → login</div>
   </div>
-</div>
 
-<!-- DASHBOARD -->
-<div id="dash" class="card hidden">
-  <div class="row">
-    <div class="left col">
-      <div style="display:flex;align-items:center;gap:12px">
+  <!-- DASHBOARD -->
+  <div id="dash" class="card hidden">
+    <div class="row">
+      <div class="left col">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div>
+            <div id="greeting" class="accent" style="font-size:16px"></div>
+            <div class="tiny muted" id="roleBadge"></div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div class="tiny muted">Today: <span id="todayName"></span></div>
+            <div class="tiny muted">Time: <span id="nowTime"></span></div>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid #222;margin:10px 0" />
+
         <div>
-          <div id="greeting" class="accent" style="font-size:16px"></div>
-          <div class="tiny muted" id="roleBadge"></div>
+          <div style="font-weight:700">Today's Tasks</div>
+          <div id="todayTasksArea" style="margin-top:8px"></div>
         </div>
-        <div style="margin-left:auto;text-align:right">
-          <div class="tiny muted">Today: <span id="todayName"></span></div>
-          <div class="tiny muted">Time: <span id="nowTime"></span></div>
-        </div>
-      </div>
 
-      <hr style="border:none;border-top:1px solid #222;margin:10px 0" />
-
-      <div>
-        <div style="font-weight:700">Today's Tasks</div>
-        <div id="todayTasksArea" style="margin-top:8px"></div>
-      </div>
-
-      <div style="margin-top:12px">
-        <div style="font-weight:700">Quick Tools</div>
-        <div class="controls" style="margin-top:8px">
-          <button id="refreshBtn" class="smallbtn">Refresh</button>
-          <button id="logoutBtn" class="smallbtn">Log out</button>
+        <div style="margin-top:12px">
+          <div style="font-weight:700">Quick Tools</div>
+          <div class="controls" style="margin-top:8px">
+            <button id="logoutBtn" class="smallbtn">Log out</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="right col">
-      <div>
-        <div style="font-weight:700">My Weekly Schedule</div>
-        <div id="weekArea" style="margin-top:8px"></div>
-      </div>
-      <div style="margin-top:12px">
-        <div style="font-weight:700" id="adminPanelTitle"></div>
-        <div id="adminPanel" class="hidden">
-          <label>Add User:</label>
-          <input id="newUserName" placeholder="Name" />
-          <select id="newUserRole">
-            <option value="Anchor">Anchor</option>
-            <option value="Reporter">Reporter</option>
-            <option value="Manager">Manager</option>
-            <option value="Writer">Writer</option>
-            <option value="Head of Writing">Head of Writing</option>
-            <option value="Sponsorship Coordinator">Sponsorship Coordinator</option>
-            <option value="Camera Crew">Camera Crew</option>
-            <option value="Assistant Director">Assistant Director</option>
-            <option value="Idea Helper">Idea Helper</option>
-          </select>
+      <div class="right col">
+        <div>
+          <div style="font-weight:700">My Weekly Schedule</div>
+          <div id="weekArea" style="margin-top:8px"></div>
+        </div>
+
+        <!-- Logan Management Tools -->
+        <div id="loganTools" class="hidden" style="margin-top:16px">
+          <div style="font-weight:700">Manage Members</div>
+          <input id="newUserName" placeholder="Name" /><br>
+          <input id="newUserRole" placeholder="Role" /><br>
           <button id="addUserBtn" class="smallbtn">Add User</button>
-          <div id="adminMsg" class="tiny muted"></div>
+          <button id="removeUserBtn" class="smallbtn">Remove User</button>
         </div>
       </div>
     </div>
+
+    <!-- Calendar -->
+    <div class="calendar card">
+      <div style="font-weight:700">Full November Calendar</div>
+      <table id="calendarTable">
+        <thead>
+          <tr><th>Day</th><th>Task</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Calendar -->
-  <div class="calendar card">
-    <div style="font-weight:700">Full November Calendar</div>
-    <table id="calendarTable">
-      <thead>
-        <tr><th>Day</th><th>Task</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
-
-<footer style="margin-top:14px" class="tiny muted center">
-  Built for school broadcasts — runs offline in Chrome.
-</footer>
+  <footer style="margin-top:14px" class="tiny muted center">
+    Built for school broadcasts — runs offline in Chrome.
+  </footer>
 </div>
 
 <script>
@@ -153,41 +144,14 @@ function pad(n){return n<10?'0'+n:n;}
 function timeNowStr(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
 
 // ---------- Users ----------
-const STORAGE_KEY='nde_news_offline_v10';
-const defaultUsers = {
+const STORAGE_KEY='nde_news_offline_v9';
+const defaultUsers={
   "Luca P":{passwordPlain:'Luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Ivana R":{passwordPlain:'Ivana123',role:'Head Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
+  "Ivana R":{passwordPlain:'Ivana123',role:'Head of Writing',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
   "Matthew F":{passwordPlain:'Matthew123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Logan P":{passwordPlain:'Lp1157551',role:'Head Of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'},notes:'',eventsNotes:{}},
-  "Maddie S":{passwordPlain:'Maddie123',role:'Manager',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Athan T":{passwordPlain:'Athan123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Lily S":{passwordPlain:'Lily123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "George H":{passwordPlain:'George123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Elena C":{passwordPlain:'Elena123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Juliana T":{passwordPlain:'Juliana123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Emma R":{passwordPlain:'Emma123',role:'Assistant Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Andrew Z":{passwordPlain:'Andrew123',role:'Cam Crew Shadow – Brennan',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Brennan":{passwordPlain:'Brennan123',role:'Cam Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Nicholas V":{passwordPlain:'Nicholas123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Dominic N":{passwordPlain:'Dominic123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Elizabeth R":{passwordPlain:'Elizabeth123',role:'Head Writer Shadow – Ivana R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Anaya D":{passwordPlain:'Anaya123',role:'Sponsorship Coordinator',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Samantha P":{passwordPlain:'Samantha123',role:'Writer Shadow – Colin',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Colin M":{passwordPlain:'Colin123',role:'Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Gianfranco B":{passwordPlain:'Gianfranco123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Alfred A":{passwordPlain:'Alfred123',role:'Set Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Jayden K":{passwordPlain:'Jayden123',role:'Set Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Mila T":{passwordPlain:'Mila123',role:'Manager',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Elda A":{passwordPlain:'Elda123',role:'Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Kane":{passwordPlain:'Kane123',role:'Set Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Finn B":{passwordPlain:'Finn123',role:'Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Eric C":{passwordPlain:'Eric123',role:'Idea Helper',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Serena S":{passwordPlain:'Serena123',role:'Reporter Shadow – Matthew F',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  "Keria M":{passwordPlain:'Keria123',role:'Camera Crew',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}}
+  "Logan P":{passwordPlain:'Lp1157551',role:'Head of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'},notes:'',eventsNotes:{}},
+  // Add all other users with schedules here...
 };
-
-};
-
 let store=null,currentUser=null;
 
 // ---------- Load / Init ----------
@@ -220,11 +184,11 @@ function populateUserDropdown(){
 // ---------- Login ----------
 const pwInput=el('pwInput'),loginBtn=el('loginBtn'),loginStatus=el('loginStatus');
 const dash=el('dash'),loginCard=el('loginCard');
-loginBtn.addEventListener('click',()=>{
+loginBtn.addEventListener('click',async()=>{
   const user=userSelect.value,pw=pwInput.value;
   if(!user){loginStatus.textContent='Choose a user';return;}
   const u=store.users[user];
-  if(pw===u.passwordPlain || pw===defaultUsers[user].passwordPlain){
+  if(pw===u.passwordPlain){
     currentUser=user;
     loginCard.classList.add('hidden');
     dash.classList.remove('hidden');
@@ -245,22 +209,26 @@ el('logoutBtn').addEventListener('click',()=>{
 // ---------- Display ----------
 const greeting=el('greeting'),roleBadge=el('roleBadge'),todayName=el('todayName'),
       nowTimeEl=el('nowTime'),todayTasksArea=el('todayTasksArea'),
-      weekArea=el('weekArea'),calendarBody=el('calendarTable').querySelector('tbody');
+      weekArea=el('weekArea'),calendarBody=el('calendarTable').querySelector('tbody'),
+      loganTools=el('loganTools');
 
 function updateAllDisplays(){
   if(!currentUser)return;
   const u=store.users[currentUser];
   greeting.textContent='Hello, '+currentUser+'!';
   roleBadge.textContent=u.role;
+  if(currentUser==='Logan P') loganTools.classList.remove('hidden'); else loganTools.classList.add('hidden');
   const d=new Date(),dow=d.toLocaleString('en-US',{weekday:'long'}),todayISO=nowISODate();
   todayName.textContent=dow+', '+todayISO;
   nowTimeEl.textContent=timeNowStr();
   todayTasksArea.innerHTML='<div>'+(u.schedule[dow]||'No tasks today').replace(/\n/g,'<br>')+'</div>';
+
   // Weekly
   weekArea.innerHTML='';
   for(const day of ['Monday','Tuesday','Wednesday','Thursday','Friday']){
     weekArea.innerHTML+=`<div><b>${day}:</b> ${(u.schedule[day]||'No tasks')}</div>`;
   }
+
   // Calendar
   calendarBody.innerHTML='';
   for(let day=1;day<=30;day++){
@@ -274,9 +242,28 @@ function updateAllDisplays(){
   }
 }
 
+// ---------- Logan Management ----------
+el('addUserBtn').addEventListener('click',()=>{
+  const name=el('newUserName').value.trim();
+  const role=el('newUserRole').value.trim();
+  if(!name || !role){alert('Fill both name and role'); return;}
+  if(store.users[name]){alert('User already exists'); return;}
+  store.users[name]={passwordPlain:name+'123',role:role,schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}};
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
+  populateUserDropdown();
+  alert('User added!');
+});
+el('removeUserBtn').addEventListener('click',()=>{
+  const name=el('newUserName').value.trim();
+  if(!name || !store.users[name]){alert('User not found'); return;}
+  delete store.users[name];
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
+  populateUserDropdown();
+  alert('User removed!');
+});
+
 // ---------- Init ----------
 loadStore().then(populateUserDropdown);
 </script>
 </body>
 </html>
-
