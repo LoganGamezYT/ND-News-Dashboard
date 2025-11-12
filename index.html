@@ -22,9 +22,8 @@ button:hover{opacity:.85;}
 .left{flex:1;}
 .right{min-width:300px;}
 table{width:100%;border-collapse:collapse;margin-top:8px;}
-th,td{padding:8px;border:1px solid #222;font-size:13px;}
+th,td{padding:8px;border:1px solid #222;font-size:13px;text-align:center;}
 th{background:#111;}
-.tiny{font-size:12px;color:var(--muted);}
 .hidden{display:none;}
 .center{text-align:center;}
 .smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:var(--text);}
@@ -100,10 +99,10 @@ th{background:#111;}
 
     <!-- Schedule Table -->
     <div class="card" style="margin-top:12px">
-      <b>Full Weekly Schedule</b>
+      <b>Weekly Schedule</b>
       <table id="scheduleTable">
         <thead>
-          <tr><th>User</th><th>Role</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
+          <tr><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th></tr>
         </thead>
         <tbody></tbody>
       </table>
@@ -119,20 +118,17 @@ function nowISODate(){return new Date().toISOString().slice(0,10);}
 function timeNowStr(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
 
 // ---------- Users ----------
-const STORAGE_KEY='nde_news_offline_v11';
+const STORAGE_KEY='nde_news_offline_v12';
 let defaultUsers = {
-"Luca P":{passwordPlain:'Luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Ivana R":{passwordPlain:'Ivana123',role:'Head Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Matthew F":{passwordPlain:'Matthew123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Logan P":{passwordPlain:'Lp1157551',role:'Head of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'},notes:'',eventsNotes:{}},
-"Maddie S":{passwordPlain:'Maddie123',role:'Manager',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Athan T":{passwordPlain:'Athan123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Lily S":{passwordPlain:'Lily123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"George H":{passwordPlain:'George123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Elena C":{passwordPlain:'Elena123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Juliana T":{passwordPlain:'Juliana123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-"Emma R":{passwordPlain:'Emma123',role:'Assistant Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-//... Add all other users similarly
+"Luca P":{passwordPlain:'Luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Ivana R":{passwordPlain:'Ivana123',role:'Head Writer',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Matthew F":{passwordPlain:'Matthew123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Logan P":{passwordPlain:'Lp1157551',role:'Head of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'}},
+"Maddie S":{passwordPlain:'Maddie123',role:'Manager',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+// Add all other members here (including Shadows)
+"Elena C":{passwordPlain:'Elena123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Juliana T":{passwordPlain:'Juliana123',role:'Assistant Director Shadow – Emma R',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}},
+"Emma R":{passwordPlain:'Emma123',role:'Assistant Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'}}
 };
 
 // ---------- Load / Init ----------
@@ -140,17 +136,11 @@ let store=null;
 let currentUser=null;
 function loadStore(){
   const raw=localStorage.getItem(STORAGE_KEY);
-  let tempStore=null;
-  if(raw) try{tempStore=JSON.parse(raw);}catch(e){}
   store={users:{}};
   for(const name in defaultUsers){
     const u=defaultUsers[name];
-    let pass=u.passwordPlain;
-    if(tempStore && tempStore.users && tempStore.users[name] && tempStore.users[name].passwordPlain)
-      pass=tempStore.users[name].passwordPlain;
-    store.users[name]={passwordPlain:pass,role:u.role,schedule:u.schedule,notes:u.notes,eventsNotes:u.eventsNotes};
+    store.users[name]={passwordPlain:u.passwordPlain,schedule:u.schedule};
   }
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
 }
 
 // Populate user dropdown
@@ -178,7 +168,6 @@ loginBtn.addEventListener('click',()=>{
     pwInput.value='';
     loginStatus.textContent='Logged in';
     updateDisplays();
-    if(currentUser==='Logan P') el('userMgmt').classList.remove('hidden');
   } else loginStatus.textContent='Incorrect password';
 });
 
@@ -198,7 +187,7 @@ function updateDisplays(){
   if(!currentUser) return;
   const u=store.users[currentUser];
   greeting.textContent='Hello, '+currentUser+'!';
-  roleBadge.textContent=u.role;
+  roleBadge.textContent=u.role||'';
   const d=new Date(), dow=d.toLocaleString('en-US',{weekday:'long'});
   todayName.textContent=dow+', '+nowISODate();
   nowTimeEl.textContent=timeNowStr();
@@ -209,15 +198,14 @@ function updateDisplays(){
 // ---------- Render schedule table ----------
 function renderScheduleTable(){
   scheduleBody.innerHTML='';
+  // Get weekdays in order
+  const days=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const maxRows=Object.keys(store.users).length;
+  // Render each row as all days (only show schedule, not user/role)
   for(const name in store.users){
     const u=store.users[name];
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${name}</td><td>${u.role}</td>
-    <td>${u.schedule.Monday||''}</td>
-    <td>${u.schedule.Tuesday||''}</td>
-    <td>${u.schedule.Wednesday||''}</td>
-    <td>${u.schedule.Thursday||''}</td>
-    <td>${u.schedule.Friday||''}</td>`;
+    tr.innerHTML=days.map(day=>`<td>${u.schedule[day]||''}</td>`).join('');
     scheduleBody.appendChild(tr);
   }
 }
