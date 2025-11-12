@@ -3,283 +3,147 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ND News Dashboard</title> <!-- Changed tab title -->
-<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png" type="image/png" />
+<title>NDE News Dashboard — Offline</title>
+<link rel="icon" href="favicon.ico" /> <!-- Add your favicon path -->
 <style>
-  :root {
-    --bg: #0e0e0e;
-    --card: #141414;
-    --accent: #00aaff;
-    --muted: #9aa;
-    --text: #e9eef6;
-    --good: #00ff7f;
-    --warn: #ffde59;
-    --bad: #ff6b6b;
-  }
-  html, body {
-    height: 100%;
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", "Segoe UI", Arial, sans-serif;
-  }
-  .wrap {
-    max-width: 1100px;
-    margin: 18px auto;
-    padding: 18px;
-  }
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  h1 {
-    margin: 0;
-    font-size: 22px;
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap:8px;
-  }
-  h1 img {
-    height:28px;
-  }
-  .card {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 12px;
-    box-shadow: 0 6px 28px rgba(0,0,0,0.6);
-  }
-  .row {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .col {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  label {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  select, input, textarea, button {
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: #0f1720;
-    border: 1px solid #222;
-    color: var(--text);
-    font-size: 14px;
-  }
-  button {
-    cursor: pointer;
-    border: none;
-    transition: 0.2s;
-  }
-  button:hover {
-    opacity: 0.85;
-  }
-  .controls {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .left { flex: 1; }
-  .right { min-width: 300px; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    padding: 8px;
-    border: 1px solid #222;
-    text-align: left;
-    font-size: 13px;
-  }
-  th {
-    background: #111;
-  }
-  .tiny {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .accent { color: var(--accent); }
-  .hidden { display: none; }
-  .center { text-align: center; }
-  .smallbtn {
-    padding: 6px 10px;
-    border-radius: 6px;
-    background: #0b1220;
-    color: var(--text);
-  }
-  @media (max-width: 880px) {
-    .row { flex-direction: column; }
-    .right { min-width: unset; width: 100%; }
-  }
-  .calendar {
-    margin-top: 16px;
-    overflow-x: auto;
-  }
-  .calendar .today {
-    background: #ffaa00;
-    color: #000;
-    font-weight: 700;
-  }
-  .modal {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-    width: 90%;
-    max-width: 480px;
-  }
-  .modal .card {
-    padding: 16px;
-  }
-  .error { color: var(--bad); font-weight: 700; }
-  .ok { color: var(--good); font-weight: 700; }
+:root {
+  --bg:#0e0e0e; --card:#141414; --accent:#00aaff; --muted:#9aa;
+  --text:#e9eef6; --good:#00ff7f; --warn:#ffde59; --bad:#ff6b6b;
+}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+.wrap{max-width:1100px;margin:18px auto;padding:18px;}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:22px;color:var(--accent);}
+.card{background:var(--card);border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
+.row{display:flex;gap:12px;align-items:flex-start;}
+.col{display:flex;flex-direction:column;gap:8px;}
+label{font-size:13px;color:var(--muted);}
+select,input,textarea,button{padding:8px 10px;border-radius:8px;background:#0f1720;border:1px solid #222;color:var(--text);font-size:14px;}
+button{cursor:pointer;border:none;transition:.2s;}
+button:hover{opacity:.85;}
+.controls{display:flex;gap:8px;flex-wrap:wrap;}
+.left{flex:1;}
+.right{min-width:300px;}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:8px;border:1px solid #222;text-align:left;font-size:13px;}
+th{background:#111;}
+.tiny{font-size:12px;color:var(--muted);}
+.accent{color:var(--accent);}
+.hidden{display:none;}
+.center{text-align:center;}
+.smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:var(--text);}
+@media(max-width:880px){.row{flex-direction:column}.right{min-width:unset;width:100%;}}
+.calendar{margin-top:16px;overflow-x:auto;}
+.calendar .today{background:#ffaa00;color:#000;font-weight:700;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png" alt="Logo">ND News Dashboard</h1>
-    <div class="toolbar">
-      <!-- Removed offline demo text -->
-    </div>
-  </header>
+<header>
+<h1>NDE News Dashboard</h1>
+<div class="toolbar">
+  <div class="tiny muted">Offline demo</div>
+  <button id="printBtn" class="smallbtn">🖨 Print Tasks</button>
+  <select id="theme" class="smallbtn">
+    <option value="dark">Dark</option>
+    <option value="blue">Blue Neon</option>
+    <option value="gold">Gold</option>
+  </select>
+</div>
+</header>
 
-  <!-- LOGIN CARD -->
-  <div id="loginCard" class="card">
-    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-      <div>
-        <label>Username</label><br>
-        <select id="userSelect"></select>
-      </div>
-      <div>
-        <label>Password</label><br>
-        <input id="pwInput" type="password" placeholder="Enter password" />
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <button id="loginBtn" style="background:var(--accent);color:#001;font-weight:600;">Login</button>
-        <button id="openChangePwBtn" class="smallbtn">Change Password</button>
-      </div>
-      <div style="margin-left:auto" class="muted tiny" id="loginStatus">Select user → login</div>
+<!-- LOGIN CARD -->
+<div id="loginCard" class="card">
+  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <div>
+      <label>Username</label><br>
+      <select id="userSelect"></select>
     </div>
+    <div>
+      <label>Password</label><br>
+      <input id="pwInput" type="password" placeholder="Enter password" />
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <button id="loginBtn" style="background:var(--accent);color:#001;font-weight:600;">Login</button>
+    </div>
+    <div style="margin-left:auto" class="muted tiny" id="loginStatus">Select user → login</div>
   </div>
+</div>
 
-  <!-- DASHBOARD -->
-  <div id="dash" class="card hidden">
-    <div class="row">
-      <div class="left col">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div>
-            <div id="greeting" class="accent" style="font-size:16px"></div>
-            <div class="tiny muted" id="roleBadge"></div>
-          </div>
-          <div style="margin-left:auto;text-align:right">
-            <div class="tiny muted">Today: <span id="todayName"></span></div>
-            <div class="tiny muted">Time: <span id="nowTime"></span></div>
-          </div>
-        </div>
-
-        <hr style="border:none;border-top:1px solid #222;margin:10px 0" />
-
+<!-- DASHBOARD -->
+<div id="dash" class="card hidden">
+  <div class="row">
+    <div class="left col">
+      <div style="display:flex;align-items:center;gap:12px">
         <div>
-          <div style="font-weight:700">Today's Tasks</div>
-          <div id="todayTasksArea" style="margin-top:8px"></div>
+          <div id="greeting" class="accent" style="font-size:16px"></div>
+          <div class="tiny muted" id="roleBadge"></div>
         </div>
-
-        <div style="margin-top:12px">
-          <div style="font-weight:700">Quick Tools</div>
-          <div class="controls" style="margin-top:8px">
-            <button id="refreshBtn" class="smallbtn">Refresh</button>
-            <button id="logoutBtn" class="smallbtn">Log out</button>
-          </div>
+        <div style="margin-left:auto;text-align:right">
+          <div class="tiny muted">Today: <span id="todayName"></span></div>
+          <div class="tiny muted">Time: <span id="nowTime"></span></div>
         </div>
       </div>
 
-      <div class="right col">
-        <div>
-          <div style="font-weight:700; display:flex; align-items:center; gap:8px">
-            My Weekly Schedule
-            <div style="margin-left:auto">
-              <button id="prevWeekBtn" class="smallbtn">◀</button>
-              <span id="weekLabel" class="tiny muted">Week 1</span>
-              <button id="nextWeekBtn" class="smallbtn">▶</button>
-            </div>
-          </div>
-          <div id="weekArea" style="margin-top:8px; display:grid; gap:6px;"></div>
+      <hr style="border:none;border-top:1px solid #222;margin:10px 0" />
 
-          <!-- Admin Panel (Logan only) -->
-          <div id="adminPanel" class="card hidden" style="margin-top:12px">
-            <div style="font-weight:700;margin-bottom:6px">Manager Panel</div>
-            <div class="controls">
-              <input type="text" id="newUserName" placeholder="Username" />
-              <select id="newUserRole">
-                <option value="Anchor">Anchor</option>
-                <option value="Head of Writing">Head of Writing</option>
-                <option value="Reporter">Reporter</option>
-                <option value="Manager">Manager</option>
-              </select>
-              <input type="password" id="newUserPassword" placeholder="Password" />
-              <button id="addUserBtn" class="smallbtn">Add Member</button>
-            </div>
-            <div style="margin-top:8px">
-              <div style="font-weight:700">Existing Members</div>
-              <div id="memberList" style="margin-top:6px; display:grid; gap:4px;"></div>
-            </div>
-          </div>
+      <div>
+        <div style="font-weight:700">Today's Tasks</div>
+        <div id="todayTasksArea" style="margin-top:8px"></div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div style="font-weight:700">Quick Tools</div>
+        <div class="controls" style="margin-top:8px">
+          <button id="refreshBtn" class="smallbtn">Refresh</button>
+          <button id="logoutBtn" class="smallbtn">Log out</button>
         </div>
       </div>
     </div>
 
-    <!-- Calendar -->
-    <div class="calendar card">
-      <div style="font-weight:700">Full November Calendar</div>
-      <table id="calendarTable">
-        <thead>
-          <tr><th>Day</th><th>Task</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- CHANGE PASSWORD MODAL -->
-  <div id="changePwModal" class="modal hidden">
-    <div class="card">
-      <div style="font-weight:700">Change Password</div>
-      <div style="margin-top:10px">
-        <div class="field">
-          <label>Current password</label>
-          <input id="currentPwInput" type="password" />
-        </div>
-        <div class="field">
-          <label>New password</label>
-          <input id="newPwInput" type="password" />
-        </div>
-        <div class="field">
-          <label>Confirm new password</label>
-          <input id="confirmNewPwInput" type="password" />
-        </div>
-        <div id="changePwMsg" class="tiny muted"></div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button id="changePwSave" style="background:var(--accent);color:#001">Save new password</button>
-          <button id="changePwCancel" class="smallbtn">Cancel</button>
+    <div class="right col">
+      <div>
+        <div style="font-weight:700">My Weekly Schedule</div>
+        <div id="weekArea" style="margin-top:8px"></div>
+      </div>
+      <div style="margin-top:12px">
+        <div style="font-weight:700" id="adminPanelTitle"></div>
+        <div id="adminPanel" class="hidden">
+          <label>Add User:</label>
+          <input id="newUserName" placeholder="Name" />
+          <select id="newUserRole">
+            <option value="Anchor">Anchor</option>
+            <option value="Reporter">Reporter</option>
+            <option value="Manager">Manager</option>
+            <option value="Writer">Writer</option>
+            <option value="Head of Writing">Head of Writing</option>
+            <option value="Sponsorship Coordinator">Sponsorship Coordinator</option>
+            <option value="Camera Crew">Camera Crew</option>
+            <option value="Assistant Director">Assistant Director</option>
+            <option value="Idea Helper">Idea Helper</option>
+          </select>
+          <button id="addUserBtn" class="smallbtn">Add User</button>
+          <div id="adminMsg" class="tiny muted"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <footer style="margin-top:14px" class="tiny muted center">
-    Built for school broadcasts — runs offline in Chrome.
-  </footer>
+  <!-- Calendar -->
+  <div class="calendar card">
+    <div style="font-weight:700">Full November Calendar</div>
+    <table id="calendarTable">
+      <thead>
+        <tr><th>Day</th><th>Task</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<footer style="margin-top:14px" class="tiny muted center">
+  Built for school broadcasts — runs offline in Chrome.
+</footer>
 </div>
 
 <script>
@@ -287,16 +151,41 @@ function el(id){return document.getElementById(id);}
 function nowISODate(){return new Date().toISOString().slice(0,10);}
 function pad(n){return n<10?'0'+n:n;}
 function timeNowStr(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
-async function hashStr(str){const enc=new TextEncoder().encode(str);const buf=await crypto.subtle.digest('SHA-256', enc);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
 
 // ---------- Users ----------
-const STORAGE_KEY='nde_news_offline_v9';
-const defaultUsers={
-  Luca:{passwordPlain:'luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
-  Ivana:{passwordPlain:'ivana123',role:'Head of Writing',schedule:{Monday:'Writing Meeting -- Lunch Recess',Tuesday:'Review Script -- Lunch Recess',Wednesday:'Junior Writing Team -- First Recess',Thursday:'Editing -- Last Recess',Friday:'Finalize News Draft'},notes:'',eventsNotes:{}},
-  Matthew:{passwordPlain:'matthew123',role:'Reporter',schedule:{Monday:'News Practice -- Lunch Recess',Tuesday:'Record Clips -- Lunch Recess',Wednesday:'Help Writing Team -- First Recess',Thursday:'Camera Prep -- Last Recess',Friday:'Live News Filming'},notes:'',eventsNotes:{}},
-  Logan:{passwordPlain:'Lp1157551',role:'Head Of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'},notes:'',eventsNotes:{}}
+const STORAGE_KEY='nde_news_offline_v10';
+const defaultUsers = {
+  "Luca P":{passwordPlain:'Luca123',role:'Anchor',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
+  "Ivana R":{passwordPlain:'Ivana123',role:'Head of Writing',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
+  "Matthew F":{passwordPlain:'Matthew123',role:'Reporter',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Last Recess',Friday:'Library Meeting -- Lunch Recess'},notes:'',eventsNotes:{}},
+  "Logan P":{passwordPlain:'Logan123',role:'Head of News/Director',schedule:{Monday:'Meeting Library -- Lunch Recess',Tuesday:'Mrs Garafalo Duty -- Lunch Recess',Wednesday:'Junior Members -- First Recess',Thursday:'Library Meeting -- Lunch Recess',Friday:'Library Meeting -- Last Recess'},notes:'',eventsNotes:{}},
+  "Maddie S":{passwordPlain:'Maddie123',role:'Manager',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Athan T":{passwordPlain:'Athan123',role:'Anchor',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Lily S":{passwordPlain:'Lily123',role:'Anchor',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "George H":{passwordPlain:'George123',role:'Reporter',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Elena C":{passwordPlain:'Elena123',role:'Assistant Director',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Juliana T":{passwordPlain:'Juliana123',role:'Assistant Director',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Emma R":{passwordPlain:'Emma123',role:'Assistant Director',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Andrew Z":{passwordPlain:'Andrew123',role:'Cam Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Brennan":{passwordPlain:'Brennan123',role:'Cam Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Nicholas V":{passwordPlain:'Nicholas123',role:'Sponsorship Coordinator',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Dominic N":{passwordPlain:'Dominic123',role:'Sponsorship Coordinator',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Elizabeth R":{passwordPlain:'Elizabeth123',role:'Head Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Anaya D":{passwordPlain:'Anaya123',role:'Sponsorship Coordinator',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Samantha P":{passwordPlain:'Samantha123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Colin M":{passwordPlain:'Colin123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Gianfranco B":{passwordPlain:'Gianfranco123',role:'Reporter',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Alfred A":{passwordPlain:'Alfred123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Jayden K":{passwordPlain:'Jayden123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Mila T":{passwordPlain:'Mila123',role:'Manager',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Elda A":{passwordPlain:'Elda123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Kane":{passwordPlain:'Kane123',role:'Set Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Finn B":{passwordPlain:'Finn123',role:'Writer',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Eric C":{passwordPlain:'Eric123',role:'Idea Helper',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Serena S":{passwordPlain:'Serena123',role:'Reporter',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}},
+  "Keria M":{passwordPlain:'Keria123',role:'Camera Crew',schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}}
 };
+
 let store=null,currentUser=null;
 
 // ---------- Load / Init ----------
@@ -321,7 +210,7 @@ function populateUserDropdown(){
   userSelect.innerHTML='<option value="">-- Choose User --</option>';
   for(const name in store.users){
     const o=document.createElement('option');
-    o.value=name; o.textContent=name;
+    o.value=name; o.text=name;
     userSelect.appendChild(o);
   }
 }
@@ -329,14 +218,11 @@ function populateUserDropdown(){
 // ---------- Login ----------
 const pwInput=el('pwInput'),loginBtn=el('loginBtn'),loginStatus=el('loginStatus');
 const dash=el('dash'),loginCard=el('loginCard');
-loginBtn.addEventListener('click',async()=>{
+loginBtn.addEventListener('click',()=>{
   const user=userSelect.value,pw=pwInput.value;
   if(!user){loginStatus.textContent='Choose a user';return;}
   const u=store.users[user];
-  const h=await hashStr(pw);
-  if(h===u.passHash || (!u.passHash && pw===defaultUsers[user].passwordPlain)){
-    if(!u.passHash) u.passHash=h;
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
+  if(pw===u.passwordPlain || pw===defaultUsers[user].passwordPlain){
     currentUser=user;
     loginCard.classList.add('hidden');
     dash.classList.remove('hidden');
@@ -354,101 +240,13 @@ el('logoutBtn').addEventListener('click',()=>{
   loginStatus.textContent='Select user → login';
 });
 
-// ---------- Change Password ----------
-const changePwModal=el('changePwModal'),
-      currentPwInput=el('currentPwInput'),
-      newPwInput=el('newPwInput'),
-      confirmNewPwInput=el('confirmNewPwInput'),
-      changePwSave=el('changePwSave'),
-      changePwCancel=el('changePwCancel'),
-      changePwMsg=el('changePwMsg'),
-      openChangePwBtn=el('openChangePwBtn');
-
-openChangePwBtn.addEventListener('click',()=>{
-  if(!userSelect.value){loginStatus.textContent='Select user first'; return;}
-  changePwModal.classList.remove('hidden');
-  currentPwInput.value=''; newPwInput.value=''; confirmNewPwInput.value=''; changePwMsg.textContent='';
-});
-
-changePwCancel.addEventListener('click',()=>{ changePwModal.classList.add('hidden'); changePwMsg.textContent=''; });
-changePwSave.addEventListener('click',async()=>{
-  const u=store.users[userSelect.value];
-  if(!u){changePwMsg.textContent='Select user first';changePwMsg.className='error';return;}
-  const current=currentPwInput.value,newPw=newPwInput.value,confirm=confirmNewPwInput.value;
-  if(!current){changePwMsg.textContent='Enter current password';changePwMsg.className='error';return;}
-  const hCurrent=await hashStr(current);
-  if(hCurrent!==u.passHash){changePwMsg.textContent='Current password incorrect';changePwMsg.className='error';return;}
-  if(!newPw){changePwMsg.textContent='Enter new password';changePwMsg.className='error';return;}
-  if(newPw!==confirm){changePwMsg.textContent='Passwords do not match';changePwMsg.className='error';return;}
-  u.passHash=await hashStr(newPw);
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
-  changePwMsg.textContent='Password changed!';
-  changePwMsg.className='ok';
-  setTimeout(()=>{changePwModal.classList.add('hidden');},1200);
-});
-
 // ---------- Display ----------
 const greeting=el('greeting'),roleBadge=el('roleBadge'),todayName=el('todayName'),
       nowTimeEl=el('nowTime'),todayTasksArea=el('todayTasksArea'),
-      weekArea=el('weekArea'),calendarBody=el('calendarTable').querySelector('tbody'),
-      adminPanel=el('adminPanel'),newUserName=el('newUserName'),newUserRole=el('newUserRole'),
-      newUserPassword=el('newUserPassword'),addUserBtn=el('addUserBtn'),memberList=el('memberList'),
-      weekLabel=el('weekLabel');
-
-let currentWeek=1;
-
-function updateWeekDisplay(){
-  if(!currentUser) return;
-  const u=store.users[currentUser];
-  weekArea.innerHTML='';
-  const days=['Monday','Tuesday','Wednesday','Thursday','Friday'];
-  for(const day of days){
-    weekArea.innerHTML+=`<div><b>${day}:</b> ${(u.schedule[day]||'No tasks')}</div>`;
-  }
-  weekLabel.textContent='Week '+currentWeek;
-}
-
-el('prevWeekBtn').addEventListener('click',()=>{ if(currentWeek>1){currentWeek--; updateWeekDisplay(); } });
-el('nextWeekBtn').addEventListener('click',()=>{ if(currentWeek<4){currentWeek++; updateWeekDisplay(); } });
-
-function updateMemberList() {
-  memberList.innerHTML='';
-  for(const name in store.users){
-    if(name==='Logan') continue;
-    const div=document.createElement('div');
-    div.style.display='flex'; div.style.gap='4px'; div.style.alignItems='center';
-    div.innerHTML=`<span>${name} — ${store.users[name].role}</span>`;
-    const roleSel=document.createElement('select');
-    ['Anchor','Head of Writing','Reporter','Manager'].forEach(r=>{
-      const o=document.createElement('option'); o.value=r; o.text=r;
-      if(r===store.users[name].role) o.selected=true;
-      roleSel.appendChild(o);
-    });
-    roleSel.addEventListener('change',()=>{ store.users[name].role=roleSel.value; localStorage.setItem(STORAGE_KEY,JSON.stringify(store)); updateAllDisplays(); });
-    const delBtn=document.createElement('button'); delBtn.className='smallbtn'; delBtn.textContent='Remove';
-    delBtn.addEventListener('click',()=>{ if(confirm(`Remove ${name}?`)){ delete store.users[name]; localStorage.setItem(STORAGE_KEY,JSON.stringify(store)); populateUserDropdown(); updateMemberList(); }});
-    div.appendChild(roleSel); div.appendChild(delBtn);
-    memberList.appendChild(div);
-  }
-}
-
-addUserBtn.addEventListener('click',()=>{
-  const name=newUserName.value.trim();
-  const role=newUserRole.value;
-  const pw=newUserPassword.value;
-  if(!name || !pw){alert('Enter username and password');return;}
-  if(store.users[name]){alert('User already exists');return;}
-  store.users[name]={passwordPlain:pw,role:role,schedule:{Monday:'',Tuesday:'',Wednesday:'',Thursday:'',Friday:''},notes:'',eventsNotes:{}};
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
-  populateUserDropdown();
-  updateMemberList();
-  newUserName.value=''; newUserPassword.value='';
-});
-
-function updateAdminPanelVisibility(){ if(currentUser==='Logan') adminPanel.classList.remove('hidden'); else adminPanel.classList.add('hidden'); }
+      weekArea=el('weekArea'),calendarBody=el('calendarTable').querySelector('tbody');
 
 function updateAllDisplays(){
-  if(!currentUser) return;
+  if(!currentUser)return;
   const u=store.users[currentUser];
   greeting.textContent='Hello, '+currentUser+'!';
   roleBadge.textContent=u.role;
@@ -456,13 +254,15 @@ function updateAllDisplays(){
   todayName.textContent=dow+', '+todayISO;
   nowTimeEl.textContent=timeNowStr();
   todayTasksArea.innerHTML='<div>'+(u.schedule[dow]||'No tasks today').replace(/\n/g,'<br>')+'</div>';
-  updateWeekDisplay();
-  updateAdminPanelVisibility();
-  if(currentUser==='Logan') updateMemberList();
-
+  // Weekly
+  weekArea.innerHTML='';
+  for(const day of ['Monday','Tuesday','Wednesday','Thursday','Friday']){
+    weekArea.innerHTML+=`<div><b>${day}:</b> ${(u.schedule[day]||'No tasks')}</div>`;
+  }
+  // Calendar
   calendarBody.innerHTML='';
   for(let day=1;day<=30;day++){
-    const dateStr=`2025-11-${pad(day)}`;
+    const dateStr=`2025-11-${day.toString().padStart(2,'0')}`;
     const tempDate=new Date(dateStr);
     const tempDow=tempDate.toLocaleString('en-US',{weekday:'long'});
     const task=u.schedule[tempDow]||'No tasks';
@@ -473,7 +273,7 @@ function updateAllDisplays(){
 }
 
 // ---------- Init ----------
-loadStore().then(()=>{ populateUserDropdown(); });
+loadStore().then(populateUserDropdown);
 </script>
 </body>
 </html>
