@@ -1,272 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ND News Dashboard</title>
-<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png" type="image/png" />
+<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png" type="image/png">
 <style>
-  :root {
-    --bg: #0e0e0e;
-    --card: #141414;
-    --accent: #00aaff;
-    --muted: #9aa;
-    --text: #e9eef6;
-    --good: #00ff7f;
-    --warn: #ffde59;
-    --bad: #ff6b6b;
-  }
-  body, html {
-    margin:0;
-    font-family:"Inter","Segoe UI",Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-  }
-  .wrap{
-    max-width:800px;
-    margin:20px auto;
-    padding:12px;
-  }
-  h1{
-    font-size:22px;
-    color:var(--accent);
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  h1 img{
-    height:28px;
-  }
-  .card{
-    background:var(--card);
-    border-radius:12px;
-    padding:16px;
-    margin-top:12px;
-    box-shadow:0 6px 28px rgba(0,0,0,0.6);
-  }
-  label{
-    font-size:13px;
-    color:var(--muted);
-  }
-  select,input,button{
-    padding:8px 10px;
-    border-radius:8px;
-    background:#0f1720;
-    border:1px solid #222;
-    color:var(--text);
-    font-size:14px;
-  }
-  button{
-    cursor:pointer;
-    border:none;
-    transition:0.2s;
-  }
-  button:hover{opacity:0.85;}
-  .smallbtn{
-    padding:6px 10px;
-    border-radius:6px;
-    background:#0b1220;
-    color:var(--text);
-  }
-  .tiny{font-size:12px;color:var(--muted);}
-  .accent{color:var(--accent);}
+  body{margin:0;font-family:sans-serif;background:#0e0e0e;color:#e9eef6;}
+  .wrap{max-width:800px;margin:20px auto;padding:12px;}
+  h1{color:#00aaff;display:flex;align-items:center;gap:8px;}
+  h1 img{height:28px;}
+  .card{background:#141414;border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
+  label,input,select,button{padding:8px;border-radius:8px;background:#0f1720;border:1px solid #222;color:#e9eef6;margin-top:4px;width:100%;}
+  button{cursor:pointer;border:none;transition:.2s;}
+  button:hover{opacity:.85;}
+  .smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:#e9eef6;margin-top:4px;width:auto;}
   .hidden{display:none;}
-  .center{text-align:center;}
   table{width:100%;border-collapse:collapse;margin-top:8px;}
   th,td{padding:8px;border:1px solid #222;text-align:left;font-size:13px;}
   th{background:#111;}
   .today{background:#ffaa00;color:#000;font-weight:700;}
-  .modal{
-    position:fixed;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    z-index:999;width:90%;max-width:480px;
-  }
-  .error{color:var(--bad);font-weight:700;}
-  .ok{color:var(--good);font-weight:700;}
+  .accent{color:#00aaff;}
+  .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:999;width:90%;max-width:480px;}
+  .error{color:#ff6b6b;font-weight:700;}
+  .ok{color:#00ff7f;font-weight:700;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png" alt="Logo">ND News Dashboard</h1>
+<h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png">ND News Dashboard</h1>
 
-  <!-- LOGIN CARD -->
-  <div id="loginCard" class="card">
-    <label>Username</label><br>
-    <select id="userSelect"></select><br><br>
-    <label>Password</label><br>
-    <input type="password" id="pwInput" placeholder="Enter password" /><br><br>
-    <button id="loginBtn" style="background:var(--accent);color:#001;font-weight:600;">Login</button>
-    <button id="openChangePwBtn" class="smallbtn">Change Password</button>
-    <div id="loginStatus" class="tiny muted" style="margin-top:6px;">Select user → login</div>
-  </div>
+<div id="loginCard" class="card">
+<label>Username</label>
+<select id="userSelect"></select>
+<label>Password</label>
+<input type="password" id="pwInput" placeholder="Enter password">
+<button id="loginBtn" style="background:#00aaff;color:#001;font-weight:600;">Login</button>
+<div id="loginStatus" class="tiny muted" style="margin-top:6px;">Select user → login</div>
+</div>
 
-  <!-- DASHBOARD -->
-  <div id="dash" class="card hidden">
-    <div id="greeting" class="accent" style="font-size:16px;"></div>
-    <div id="roleBadge" class="tiny muted"></div>
-    <div id="todayName" class="tiny muted"></div>
-    <div id="nowTime" class="tiny muted"></div>
+<div id="dash" class="card hidden">
+<div id="greeting" class="accent"></div>
+<div id="roleBadge" class="tiny muted"></div>
+<div id="todayName" class="tiny muted"></div>
+<div id="nowTime" class="tiny muted"></div>
 
-    <hr>
+<hr>
 
-    <div>
-      <b>Today's Tasks:</b>
-      <div id="todayTasksArea" style="margin-top:6px;"></div>
-    </div>
+<b>Today's Tasks:</b>
+<div id="todayTasksArea" style="margin-top:6px;"></div>
 
-    <div style="margin-top:12px">
-      <b>Weekly Schedule:</b>
-      <div id="weekArea" style="margin-top:6px;"></div>
-    </div>
+<b style="margin-top:12px;display:block;">Weekly Schedule:</b>
+<div id="weekArea" style="margin-top:6px;"></div>
 
-    <div style="margin-top:12px">
-      <button id="refreshBtn" class="smallbtn">Refresh</button>
-      <button id="logoutBtn" class="smallbtn">Log out</button>
-    </div>
+<div style="margin-top:12px;">
+<button id="refreshBtn" class="smallbtn">Refresh</button>
+<button id="logoutBtn" class="smallbtn">Log out</button>
+</div>
 
-    <div id="adminPanel" class="card hidden" style="margin-top:12px">
-      <b>Manager Panel</b>
-      <div style="margin-top:6px">
-        <input type="text" id="newUserName" placeholder="Username" />
-        <select id="newUserRole">
-          <option>Anchor</option>
-          <option>Head of Writing</option>
-          <option>Reporter</option>
-          <option>Manager</option>
-        </select>
-        <input type="password" id="newUserPassword" placeholder="Password" />
-        <button id="addUserBtn" class="smallbtn">Add Member</button>
-      </div>
-      <div id="memberList" style="margin-top:6px;"></div>
-    </div>
-
-    <div class="calendar card">
-      <b>November Calendar</b>
-      <table id="calendarTable">
-        <thead><tr><th>Day</th><th>Task</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- CHANGE PASSWORD MODAL -->
-  <div id="changePwModal" class="modal hidden">
-    <div class="card">
-      <b>Change Password</b>
-      <label>Current password</label><input id="currentPwInput" type="password" /><br>
-      <label>New password</label><input id="newPwInput" type="password" /><br>
-      <label>Confirm new password</label><input id="confirmNewPwInput" type="password" /><br>
-      <div id="changePwMsg" class="tiny muted"></div>
-      <button id="changePwSave" style="background:var(--accent);color:#001">Save new password</button>
-      <button id="changePwCancel" class="smallbtn">Cancel</button>
-    </div>
-  </div>
-
+<div class="calendar card">
+<b>November Calendar</b>
+<table id="calendarTable">
+<thead><tr><th>Day</th><th>Task</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
 </div>
 
 <script>
-function el(id){return document.getElementById(id);}
-function pad(n){return n<10?'0'+n:n;}
-function timeNowStr(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
-async function hashStr(str){const enc=new TextEncoder().encode(str);const buf=await crypto.subtle.digest('SHA-256', enc);return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-
 const STORAGE_KEY='nd_news_store';
-let store=null,currentUser=null;
+let store={},currentUser=null;
 
-// Default users with updated schedule
 const defaultUsers={
-  Luca:{passwordPlain:'luca123',role:'Anchor',schedule:{Monday:'Meeting in Library',Tuesday:'Mrs Garafalo Duty at Last',Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',Friday:'Meeting in Library at Lunch and Junior Members at Last'},notes:'',eventsNotes:{}},
-  Ivana:{passwordPlain:'ivana123',role:'Head of Writing',schedule:{Monday:'Meeting in Library',Tuesday:'Mrs Garafalo Duty at Last',Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',Friday:'Meeting in Library at Lunch and Junior Members at Last'},notes:'',eventsNotes:{}},
-  Matthew:{passwordPlain:'matthew123',role:'Reporter',schedule:{Monday:'Meeting in Library',Tuesday:'Mrs Garafalo Duty at Last',Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',Friday:'Meeting in Library at Lunch and Junior Members at Last'},notes:'',eventsNotes:{}},
-  Logan:{passwordPlain:'Lp1157551',role:'Head Of News/Director',schedule:{Monday:'Meeting in Library',Tuesday:'Mrs Garafalo Duty at Last',Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',Friday:'Meeting in Library at Lunch and Junior Members at Last'},notes:'',eventsNotes:{}}
+  Luca:'Anchor',
+  Ivana:'Head of Writing',
+  Matthew:'Reporter',
+  Logan:'Head Of News/Director'
 };
 
-async function loadStore(){
-  const raw=localStorage.getItem(STORAGE_KEY);
-  let temp=null;
-  try{temp=raw?JSON.parse(raw):{};}catch(e){}
-  store={users:{}};
-  for(const name in defaultUsers){
-    const u=defaultUsers[name];
-    let passHash='';
-    if(temp && temp.users && temp.users[name] && temp.users[name].passHash) passHash=temp.users[name].passHash;
-    store.users[name]={passHash:passHash,role:u.role,schedule:u.schedule,notes:u.notes,eventsNotes:u.eventsNotes};
-  }
+const schedule={
+  Monday:'Meeting in Library',
+  Tuesday:'Mrs Garafalo Duty at Last',
+  Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',
+  Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',
+  Friday:'Meeting in Library at Lunch and Junior Members at Last'
+};
+
+function el(id){return document.getElementById(id);}
+function pad(n){return n<10?'0'+n:n;}
+function timeNow(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
+
+function loadStore(){
+  store=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+  if(!store.users) store.users={};
+  for(const u in defaultUsers) store.users[u]=store.users[u]||{role:defaultUsers[u],pass:'123'};
   localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
 }
 
-// Populate users dropdown
-const userSelect=el('userSelect');
-function populateUserDropdown(){
-  userSelect.innerHTML='<option value="">-- Choose User --</option>';
-  for(const name in store.users){
-    const o=document.createElement('option'); o.value=name; o.textContent=name;
-    userSelect.appendChild(o);
-  }
+function populateUsers(){
+  const sel=el('userSelect'); sel.innerHTML='<option value="">-- Choose User --</option>';
+  Object.keys(store.users).forEach(u=>{const o=document.createElement('option');o.value=u;o.textContent=u; sel.appendChild(o);});
 }
 
-// Login
-const pwInput=el('pwInput'),loginBtn=el('loginBtn'),loginStatus=el('loginStatus');
-const dash=el('dash'),loginCard=el('loginCard');
-loginBtn.addEventListener('click',async()=>{
-  const user=userSelect.value,pw=pwInput.value;
-  if(!user){loginStatus.textContent='Choose a user';return;}
-  const u=store.users[user];
-  const h=await hashStr(pw);
-  if(h===u.passHash || (!u.passHash && pw===defaultUsers[user].passwordPlain)){
-    if(!u.passHash) u.passHash=h;
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
-    currentUser=user;
-    loginCard.classList.add('hidden');
-    dash.classList.remove('hidden');
-    pwInput.value='';
-    loginStatus.textContent='Logged in';
-    updateAllDisplays();
-  } else loginStatus.textContent='Incorrect password';
-});
+el('loginBtn').onclick=()=>{
+  const u=el('userSelect').value,pw=el('pwInput').value;
+  if(!u){el('loginStatus').textContent='Choose a user'; return;}
+  if(pw===store.users[u].pass){
+    currentUser=u;
+    el('loginCard').classList.add('hidden');
+    el('dash').classList.remove('hidden');
+    updateDashboard();
+  } else el('loginStatus').textContent='Incorrect password';
+};
 
-// Logout
-el('logoutBtn').addEventListener('click',()=>{
-  dash.classList.add('hidden');
-  loginCard.classList.remove('hidden');
+el('logoutBtn').onclick=()=>{
   currentUser=null;
-  loginStatus.textContent='Select user → login';
-});
+  el('dash').classList.add('hidden');
+  el('loginCard').classList.remove('hidden');
+};
 
-// Update displays
-const greeting=el('greeting'),roleBadge=el('roleBadge'),todayName=el('todayName'),nowTimeEl=el('nowTime'),todayTasksArea=el('todayTasksArea'),weekArea=el('weekArea'),calendarBody=el('calendarTable').querySelector('tbody');
-
-function updateAllDisplays(){
-  if(!currentUser) return;
+function updateDashboard(){
   const u=store.users[currentUser];
-  greeting.textContent='Hello, '+currentUser+'!';
-  roleBadge.textContent=u.role;
+  el('greeting').textContent='Hello, '+currentUser+'!';
+  el('roleBadge').textContent=u.role;
   const d=new Date(),dow=d.toLocaleString('en-US',{weekday:'long'});
-  todayName.textContent=dow+', '+d.toISOString().slice(0,10);
-  nowTimeEl.textContent=timeNowStr();
-  todayTasksArea.innerHTML=u.schedule[dow]||'No tasks today';
-
-  // Weekly schedule
-  weekArea.innerHTML='';
-  for(const day of ['Monday','Tuesday','Wednesday','Thursday','Friday']){
-    weekArea.innerHTML+=`<div><b>${day}:</b> ${u.schedule[day]}</div>`;
-  }
-
-  // Calendar
-  calendarBody.innerHTML='';
-  for(let day=1;day<=30;day++){
-    const dateStr=`2025-11-${pad(day)}`;
-    const tempDate=new Date(dateStr);
-    const tempDow=tempDate.toLocaleString('en-US',{weekday:'long'});
-    const task=u.schedule[tempDow]||'No tasks';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="${dateStr===d.toISOString().slice(0,10)?'today':''}">${dateStr}</td><td>${task}</td>`;
-    calendarBody.appendChild(tr);
+  el('todayName').textContent=dow+', '+d.toISOString().slice(0,10);
+  el('nowTime').textContent=timeNow();
+  el('todayTasksArea').textContent=schedule[dow]||'No tasks today';
+  
+  let weekHtml='';
+  for(const day in schedule) weekHtml+=`<div><b>${day}:</b> ${schedule[day]}</div>`;
+  el('weekArea').innerHTML=weekHtml;
+  
+  const tbody=el('calendarTable').querySelector('tbody'); tbody.innerHTML='';
+  for(let i=1;i<=30;i++){
+    const dstr=`2025-11-${pad(i)}`;
+    const tempDow=new Date(dstr).toLocaleString('en-US',{weekday:'long'});
+    tbody.innerHTML+=`<tr><td class="${dstr===new Date().toISOString().slice(0,10)?'today':''}">${dstr}</td><td>${schedule[tempDow]||'No tasks'}</td></tr>`;
   }
 }
 
-// Init
-loadStore().then(()=>{ populateUserDropdown(); });
+loadStore();
+populateUsers();
 </script>
 </body>
 </html>
