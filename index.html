@@ -4,43 +4,45 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ND News Dashboard</title>
-<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png" type="image/png">
+<link rel="icon" href="https://i.ibb.co/4ZGZhK8G/breaking-4.png">
 <style>
-  body{margin:0;font-family:sans-serif;background:#0e0e0e;color:#e9eef6;}
-  .wrap{max-width:800px;margin:20px auto;padding:12px;}
-  h1{color:#00aaff;display:flex;align-items:center;gap:8px;}
-  h1 img{height:28px;}
-  .card{background:#141414;border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
-  label,input,select,button{padding:8px;border-radius:8px;background:#0f1720;border:1px solid #222;color:#e9eef6;margin-top:4px;width:100%;}
-  button{cursor:pointer;border:none;transition:.2s;}
-  button:hover{opacity:.85;}
-  .smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:#e9eef6;margin-top:4px;width:auto;}
-  .hidden{display:none;}
-  table{width:100%;border-collapse:collapse;margin-top:8px;}
-  th,td{padding:8px;border:1px solid #222;text-align:left;font-size:13px;}
-  th{background:#111;}
-  .today{background:#ffaa00;color:#000;font-weight:700;}
-  .accent{color:#00aaff;}
+body{margin:0;font-family:sans-serif;background:#0e0e0e;color:#e9eef6;}
+.wrap{max-width:800px;margin:20px auto;padding:12px;}
+h1{color:#00aaff;display:flex;align-items:center;gap:8px;}
+h1 img{height:28px;}
+.card{background:#141414;border-radius:12px;padding:16px;margin-top:12px;box-shadow:0 6px 28px rgba(0,0,0,0.6);}
+label,input,select,button{padding:8px;border-radius:8px;background:#0f1720;border:1px solid #222;color:#e9eef6;margin-top:4px;width:100%;}
+button{cursor:pointer;border:none;transition:.2s;}
+button:hover{opacity:.85;}
+.smallbtn{padding:6px 10px;border-radius:6px;background:#0b1220;color:#e9eef6;margin-top:4px;width:auto;}
+.hidden{display:none;}
+.accent{color:#00aaff;}
+table{width:100%;border-collapse:collapse;margin-top:8px;}
+th,td{padding:8px;border:1px solid #222;font-size:13px;}
+th{background:#111;}
+.today{background:#ffaa00;color:#000;font-weight:700;}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1><img src="https://i.ibb.co/4ZGZhK8G/breaking-4.png">ND News Dashboard</h1>
 
+<!-- LOGIN -->
 <div id="loginCard" class="card">
 <label>Username</label>
 <select id="userSelect"></select>
 <label>Password</label>
 <input type="password" id="pwInput" placeholder="Enter password">
 <button id="loginBtn" style="background:#00aaff;color:#001;font-weight:600;">Login</button>
-<div id="loginStatus" class="tiny muted" style="margin-top:6px;">Select user → login</div>
+<div id="loginStatus" style="margin-top:6px;">Select user → login</div>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dash" class="card hidden">
 <div id="greeting" class="accent"></div>
-<div id="roleBadge" class="tiny muted"></div>
-<div id="todayName" class="tiny muted"></div>
-<div id="nowTime" class="tiny muted"></div>
+<div id="roleBadge"></div>
+<div id="todayName"></div>
+<div id="nowTime"></div>
 
 <hr>
 
@@ -55,6 +57,22 @@
 <button id="logoutBtn" class="smallbtn">Log out</button>
 </div>
 
+<!-- Admin Panel (Logan) -->
+<div id="adminPanel" class="card hidden" style="margin-top:12px">
+<b>Manager Panel</b>
+<input type="text" id="newUserName" placeholder="Username">
+<select id="newUserRole">
+<option value="Anchor">Anchor</option>
+<option value="Head of Writing">Head of Writing</option>
+<option value="Reporter">Reporter</option>
+<option value="Manager">Manager</option>
+<option value="Head Of News/Director">Head Of News/Director</option>
+</select>
+<input type="password" id="newUserPassword" placeholder="Password">
+<button id="addUserBtn" class="smallbtn">Add Member</button>
+<div id="memberList" style="margin-top:6px;"></div>
+</div>
+
 <div class="calendar card">
 <b>November Calendar</b>
 <table id="calendarTable">
@@ -62,25 +80,28 @@
 <tbody></tbody>
 </table>
 </div>
+
 </div>
 </div>
 
 <script>
 const STORAGE_KEY='nd_news_store';
-let store={},currentUser=null;
+let store=null,currentUser=null;
 
+// Default users with passwords
 const defaultUsers={
-  Luca:'Anchor',
-  Ivana:'Head of Writing',
-  Matthew:'Reporter',
-  Logan:'Head Of News/Director'
+  Luca:{pass:'luca123',role:'Anchor'},
+  Ivana:{pass:'ivana123',role:'Head of Writing'},
+  Matthew:{pass:'matthew123',role:'Reporter'},
+  Logan:{pass:'Lp1157551',role:'Head Of News/Director'}
 };
 
+// Weekly schedule
 const schedule={
   Monday:'Meeting in Library',
-  Tuesday:'Mrs Garafalo Duty at Last',
-  Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo Duty at Lunch',
-  Thursday:'Meeting in Library at First, Mr Garafalo Duty at Lunch, Meeting at Last',
+  Tuesday:'Mrs Garafalo duty at Last',
+  Wednesday:'Junior Members Meeting at First recess and Mrs Garafalo duty at Lunch',
+  Thursday:'Meeting in Library at First, Mr Garafalo duty at Lunch, Meeting at Last',
   Friday:'Meeting in Library at Lunch and Junior Members at Last'
 };
 
@@ -89,9 +110,9 @@ function pad(n){return n<10?'0'+n:n;}
 function timeNow(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
 
 function loadStore(){
-  store=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
-  if(!store.users) store.users={};
-  for(const u in defaultUsers) store.users[u]=store.users[u]||{role:defaultUsers[u],pass:'123'};
+  let raw=localStorage.getItem(STORAGE_KEY);
+  store=raw?JSON.parse(raw):{users:{}};
+  for(const u in defaultUsers) store.users[u]=store.users[u]||{pass:defaultUsers[u].pass,role:defaultUsers[u].role};
   localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
 }
 
@@ -126,17 +147,60 @@ function updateDashboard(){
   el('nowTime').textContent=timeNow();
   el('todayTasksArea').textContent=schedule[dow]||'No tasks today';
   
+  // Weekly
   let weekHtml='';
   for(const day in schedule) weekHtml+=`<div><b>${day}:</b> ${schedule[day]}</div>`;
   el('weekArea').innerHTML=weekHtml;
   
+  // Calendar
   const tbody=el('calendarTable').querySelector('tbody'); tbody.innerHTML='';
   for(let i=1;i<=30;i++){
     const dstr=`2025-11-${pad(i)}`;
     const tempDow=new Date(dstr).toLocaleString('en-US',{weekday:'long'});
     tbody.innerHTML+=`<tr><td class="${dstr===new Date().toISOString().slice(0,10)?'today':''}">${dstr}</td><td>${schedule[tempDow]||'No tasks'}</td></tr>`;
   }
+
+  // Admin Panel visibility
+  el('adminPanel').classList.toggle('hidden',currentUser!=='Logan');
+  if(currentUser==='Logan') updateMemberList();
 }
+
+// Admin functions
+const memberList=el('memberList');
+function updateMemberList(){
+  memberList.innerHTML='';
+  Object.keys(store.users).forEach(u=>{
+    if(u==='Logan') return;
+    const div=document.createElement('div');
+    div.style.display='flex'; div.style.gap='6px'; div.style.alignItems='center';
+    div.innerHTML=`<span>${u} — ${store.users[u].role}</span>`;
+    
+    const sel=document.createElement('select');
+    ['Anchor','Head of Writing','Reporter','Manager','Head Of News/Director'].forEach(r=>{
+      const o=document.createElement('option'); o.value=r; o.text=r;
+      if(r===store.users[u].role) o.selected=true; sel.appendChild(o);
+    });
+    sel.onchange=()=>{store.users[u].role=sel.value;localStorage.setItem(STORAGE_KEY,JSON.stringify(store));updateDashboard();}
+    
+    const del=document.createElement('button'); del.className='smallbtn'; del.textContent='Remove';
+    del.onclick=()=>{if(confirm(`Remove ${u}?`)){delete store.users[u]; localStorage.setItem(STORAGE_KEY,JSON.stringify(store)); populateUsers(); updateMemberList();}};
+    
+    div.appendChild(sel); div.appendChild(del);
+    memberList.appendChild(div);
+  });
+}
+
+// Add user
+el('addUserBtn').onclick=()=>{
+  const n=el('newUserName').value.trim(),r=el('newUserRole').value,p=el('newUserPassword').value;
+  if(!n||!p){alert('Enter username and password'); return;}
+  if(store.users[n]){alert('User already exists'); return;}
+  store.users[n]={pass:p,role:r};
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(store));
+  populateUsers();
+  updateMemberList();
+  el('newUserName').value=''; el('newUserPassword').value='';
+};
 
 loadStore();
 populateUsers();
